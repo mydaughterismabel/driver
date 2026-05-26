@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ขั้นตอนทำใบขับขี่สาธารณะ — สงขลา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Noto+Serif+Thai:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0f2744;
+    --navy-mid: #1a3a5e;
+    --navy-light: #254d7a;
+    --gold: #c8963e;
+    --gold-light: #e6b86a;
+    --gold-pale: #fdf3e3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text-primary: #0f2744;
+    --text-secondary: #4a6080;
+    --text-muted: #7a90a8;
+    --border: #d8e4f0;
+    --step-done: #2d7a56;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--cream);
+    color: var(--text-primary);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ─── HERO ─────────────────────────────────── */
+  .hero {
+    background: var(--navy);
+    padding: 3rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(200,150,62,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 90%, rgba(37,77,122,0.6) 0%, transparent 60%);
+  }
+  .hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,150,62,0.15);
+    border: 1px solid rgba(200,150,62,0.35);
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.04em;
+  }
+  .hero-location svg { width: 13px; height: 13px; fill: currentColor; flex-shrink: 0; }
+  .hero h1 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.35;
+    margin-bottom: 0.6rem;
+  }
+  .hero-sub {
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .info-strip {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: none;
+    overflow: hidden;
+  }
+  .info-chip {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.9rem 1rem;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .info-chip:last-child { border-right: none; }
+  .info-chip strong { color: var(--gold-light); font-weight: 500; }
+  .info-chip svg { width: 16px; height: 16px; opacity: 0.6; flex-shrink: 0; }
+
+  /* ─── MAIN ──────────────────────────────────── */
+  .main { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  /* ─── STEPS ─────────────────────────────────── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 0 20px;
+    position: relative;
+  }
+  .step:not(:last-child) .step-left::after {
+    content: '';
+    position: absolute;
+    left: 27px;
+    top: 52px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    z-index: 0;
+  }
+
+  .step-left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4px;
+  }
+
+  .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 15px;
+    font-weight: 600;
+    background: var(--white);
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition: all 0.2s ease;
+  }
+
+  .step-num.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .step-num.done {
+    background: var(--step-done);
+    border-color: var(--step-done);
+    color: white;
+    font-size: 17px;
+  }
+
+  .step-body {
+    padding: 0 0 2.4rem;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+    padding-top: 8px;
+  }
+
+  .step-title {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-top: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+  .badge-floor { background: #e8f0fc; color: #2a57b5; }
+  .badge-online { background: #e6f4ec; color: #1f7a45; }
+  .badge-app { background: #fdf0e4; color: #b36a1a; }
+
+  .step-desc {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 10px;
+  }
+
+  .step-desc strong { color: var(--text-primary); font-weight: 500; }
+
+  /* ─── CHECKLIST ─────────────────────────────── */
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 4px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e8f4ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-icon svg { width: 10px; height: 10px; stroke: #2d7a56; stroke-width: 2.5; fill: none; }
+
+  /* ─── CALLOUT BOXES ──────────────────────────── */
+  .callout {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .callout-icon { flex-shrink: 0; margin-top: 1px; }
+  .callout-icon svg { width: 17px; height: 17px; }
+
+  .callout-warn {
+    background: #fffbf0;
+    border: 1px solid #f0d98a;
+    color: #7a5c10;
+  }
+  .callout-warn .callout-icon svg { stroke: #c89a20; fill: none; stroke-width: 1.8; }
+
+  .callout-info {
+    background: #f0f6ff;
+    border: 1px solid #b8d0f5;
+    color: #1e3f75;
+  }
+  .callout-info .callout-icon svg { stroke: #3060b8; fill: none; stroke-width: 1.8; }
+
+  .callout-success {
+    background: #f0faf4;
+    border: 1px solid #a3d9b8;
+    color: #1d5e38;
+  }
+  .callout-success .callout-icon svg { stroke: #2d7a56; fill: none; stroke-width: 1.8; }
+
+  .callout strong { font-weight: 600; }
+
+  /* ─── LINK ─────────────────────────────────── */
+  .ext-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2a57b5;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    background: #e8f0fc;
+    padding: 5px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #c5d8f8;
+    transition: background 0.15s;
+  }
+  .ext-link:hover { background: #d4e5fb; }
+  .ext-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+  /* ─── FINAL STEP ────────────────────────────── */
+  .step-final .step-num {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+    font-size: 18px;
+  }
+  .step-final .step-title { color: #8a5c00; }
+
+  /* ─── FOOTER ────────────────────────────────── */
+  .footer {
+    background: var(--navy);
+    padding: 1.8rem 2rem;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+  }
+  .footer a { color: var(--gold-light); text-decoration: none; }
+
+  /* ─── ANIMATION ─────────────────────────────── */
+  .step {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .step:nth-child(1) { animation-delay: 0.05s; }
+  .step:nth-child(2) { animation-delay: 0.12s; }
+  .step:nth-child(3) { animation-delay: 0.19s; }
+  .step:nth-child(4) { animation-delay: 0.26s; }
+  .step:nth-child(5) { animation-delay: 0.33s; }
+  .step:nth-child(6) { animation-delay: 0.40s; }
+  .step:nth-child(7) { animation-delay: 0.47s; }
+  .step:nth-child(8) { animation-delay: 0.54s; }
+  .step:nth-child(9) { animation-delay: 0.61s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 540px) {
+    .info-strip { flex-direction: column; }
+    .info-chip { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); justify-content: flex-start; }
+    .info-chip:last-child { border-bottom: none; }
+    .step { grid-template-columns: 44px 1fr; gap: 0 14px; }
+    .step-num { width: 34px; height: 34px; font-size: 13px; }
+    .step:not(:last-child) .step-left::after { left: 22px; }
+    .hero h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-location">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      สำนักงานขนส่งจังหวัดสงขลา
+    </div>
+    <h1>ขั้นตอนการทำใบขับขี่<br>รถสาธารณะ</h1>
+    <p class="hero-sub">คู่มือฉบับย่อ — ทำตามได้ทันที ตั้งแต่อบรมออนไลน์จนถึงรับบัตร</p>
+  </div>
+</div>
+
+<!-- INFO STRIP -->
+<div style="max-width:760px;margin:0 auto;">
+  <div class="info-strip">
+    <div class="info-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      นัดหมายล่วงหน้าผ่าน <strong>DLT Smart Queue</strong>
+    </div>
+    <div class="info-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      ใช้เวลาโดยรวม <strong>ครึ่งวัน–หนึ่งวัน</strong>
+    </div>
+    <div class="info-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      ค่าธรรมเนียม <strong>305 บาท</strong>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="steps">
+
+    <!-- 1 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">1</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">อบรมออนไลน์</div>
+          </div>
+          <span class="step-badge badge-online">ทำก่อนวันนัด</span>
+        </div>
+        <p class="step-desc">
+          เรียนวิชากฎหมายจราจรและความปลอดภัยบนท้องถนนผ่านระบบ e-Learning ของกรมการขนส่งทางบก จนครบหลักสูตร แล้ว<strong>พิมพ์ใบรับรองผลการอบรม</strong>เก็บไว้เป็นหลักฐาน
+        </p>
+        <a class="ext-link" href="https://www.dlt-elearning.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          dlt-elearning.com
+        </a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">2</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">จองคิวนัดหมายล่วงหน้า</div>
+          </div>
+          <span class="step-badge badge-app">DLT Smart Queue</span>
+        </div>
+        <p class="step-desc">
+          จองวันและเวลาเข้ารับบริการผ่านระบบ <strong>DLT Smart Queue</strong> ได้ทั้งเว็บไซต์และแอปพลิเคชัน เพื่อลดเวลารอคิวในวันที่ไปทำ เลือก <strong>สำนักงานขนส่งจังหวัดสงขลา</strong>
+        </p>
+        <div class="callout callout-info">
+          <div class="callout-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>สำนักงานขนส่งจังหวัดสงขลา ตั้งอยู่ที่ <strong>ถนนกาญจนวนิช อ.เมือง จ.สงขลา</strong> (ใกล้ห้าแยกอ่าวน้อย)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">3</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">แจ้งความประสงค์ที่ชั้น 2</div>
+          </div>
+          <span class="step-badge badge-floor">ชั้น 2</span>
+        </div>
+        <p class="step-desc">
+          นำเอกสารทั้งหมดไปยื่นที่โต๊ะเจ้าหน้าที่<strong>หน้าห้อง ชั้น 2</strong> แจ้งเจ้าหน้าที่ว่า <strong>"มาทำใบขับขี่สาธารณะ"</strong> เจ้าหน้าที่จะตรวจสอบเอกสารและแนะนำขั้นตอนต่อไป
+        </p>
+        <div class="callout callout-warn">
+          <div class="callout-icon">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>เอกสารที่ต้องเตรียม: บัตรประชาชน, ใบรับรองแพทย์ (อายุไม่เกิน 1 เดือน), ใบรับรองผลการอบรมออนไลน์, และสำเนาใบขับขี่ส่วนบุคคล (ถ้ามี)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">4</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">ตรวจสอบประวัติอาชญากรรม</div>
+          </div>
+          <span class="step-badge badge-floor">ชั้น 2 · ช่อง 6</span>
+        </div>
+        <p class="step-desc">
+          ยื่นเอกสารที่ <strong>ช่อง 6</strong> เพื่อตรวจสอบประวัติอาชญากรรม เมื่อยื่นเอกสารแล้วให้<strong>นั่งรอเรียกชื่อ</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">5</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">ทดสอบสมรรถภาพร่างกาย</div>
+          </div>
+          <span class="step-badge badge-floor">ชั้น 3</span>
+        </div>
+        <p class="step-desc">ขึ้นไปทดสอบสมรรถภาพที่ <strong>ชั้น 3</strong> มี 3 รายการ ดังนี้</p>
+        <div class="checklist">
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span><strong>ทดสอบเวลาตอบสนอง</strong> — เหยียบเบรกให้ทันเมื่อสัญญาณปรากฏ</span>
+          </div>
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span><strong>ทดสอบการมองเห็นสี</strong> — เจ้าหน้าที่ชี้สีให้บอก</span>
+          </div>
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span><strong>ทดสอบสายตาข้างเคียง (Peripheral Vision)</strong> — วางคางไว้ตรงกลาง แสงสีจะปรากฏทางซ้ายหรือขวา ให้บอกสีที่เห็น</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">6</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">สอบข้อเขียน</div>
+          </div>
+        </div>
+        <p class="step-desc">
+          ทำข้อสอบแบบปรนัย เกี่ยวกับกฎหมายจราจรและการขับขี่ปลอดภัย
+        </p>
+        <div class="callout callout-warn">
+          <div class="callout-icon">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>ต้องได้คะแนนอย่างน้อย <strong>27 คะแนน จาก 30 คะแนน</strong><br>ได้สิทธิ์สอบ <strong>2 ครั้ง</strong> ในวันเดียวกัน หากสอบไม่ผ่านทั้งสองครั้ง สามารถนัดวันสอบใหม่ได้</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">7</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">ยื่นเอกสารหลังสอบผ่าน</div>
+          </div>
+          <span class="step-badge badge-floor">ชั้น 2 · ช่อง 6</span>
+        </div>
+        <p class="step-desc">
+          นำเอกสารไปยื่นที่ <strong>ชั้น 2 ช่อง 6</strong> อีกครั้ง เจ้าหน้าที่จะออก<strong>บัตรคิวสำหรับรอชำระเงิน</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="step">
+      <div class="step-left">
+        <div class="step-num active">8</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title">ชำระค่าธรรมเนียม</div>
+          </div>
+        </div>
+        <p class="step-desc">
+          ชำระค่าธรรมเนียมตามบัตรคิวที่ได้รับ จากนั้นเข้าไปรอในพื้นที่ถ่ายรูปทำบัตร
+        </p>
+        <div class="callout callout-success">
+          <div class="callout-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div>ค่าธรรมเนียมทำบัตรใหม่ <strong>305 บาท</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 Final -->
+    <div class="step step-final">
+      <div class="step-left">
+        <div class="step-num done">✓</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <div>
+            <div class="step-title" style="color:var(--step-done);">ถ่ายรูปและรับใบขับขี่</div>
+          </div>
+        </div>
+        <p class="step-desc">
+          ถ่ายรูปเพื่อทำบัตร รอรับใบขับขี่รถสาธารณะ — <strong>เสร็จสิ้นกระบวนการ</strong>
+        </p>
+        <div class="callout callout-success">
+          <div class="callout-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>ยินดีด้วย! คุณได้รับ<strong>ใบขับขี่รถสาธารณะ</strong>เรียบร้อยแล้ว</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>ข้อมูลอ้างอิงจาก <a href="https://www.dlt.go.th" target="_blank">กรมการขนส่งทางบก (ขนส่ง)</a> — สำนักงานขนส่งจังหวัดสงขลา</div>
+  <div style="margin-top:4px;">ควรตรวจสอบข้อมูลล่าสุดกับสำนักงานก่อนเดินทางไปทำธุรกรรม</div>
+</div>
+
+</body>
+</html>
